@@ -1,0 +1,108 @@
+import matplotlib.pyplot as plt
+import math
+
+def calcular_distancia(ponto1, ponto2):
+    return math.sqrt((ponto1[0] - ponto2[0])**2 + (ponto1[1] - ponto2[1])**2)
+
+def desenhar_poligono(coordenadas, cor='b'):
+    x = [coord[0] for coord in coordenadas]
+    y = [coord[1] for coord in coordenadas]
+    plt.plot(x + [x[0]], y + [y[0]], cor + '-')
+
+def rotacionar_poligono(coordenadas, angulo):
+    coordenadas_rotacionadas = []
+    for coord in coordenadas:
+        x = coord[0] * math.cos(math.radians(angulo)) - coord[1] * math.sin(math.radians(angulo))
+        y = coord[0] * math.sin(math.radians(angulo)) + coord[1] * math.cos(math.radians(angulo))
+        coordenadas_rotacionadas.append((x, y))
+    return coordenadas_rotacionadas
+
+def eh_poligono(lados):
+    return len(lados) >= 3 and all(comprimento > 0 for comprimento in lados)
+
+def main():
+    print("\n\nDefinindo um triângulo.")
+    n = 3
+    coordenadas_tri = []
+
+    for i in range(n):
+        x = float(input(f"\nDigite a coordenada x{i + 1}: "))
+        y = float(input(f"Digite a coordenada y{i + 1}: "))
+        coordenadas_tri.append((x, y))
+
+    comprimentos_lados_tri = [calcular_distancia(coordenadas_tri[i], coordenadas_tri[(i+1)%n]) for i in range(n)]
+
+    if eh_poligono(comprimentos_lados_tri):
+        print("\nAs coordenadas formam um triângulo.")
+        plt.figure(figsize=(6, 6))
+        plt.title("Imagem com Polígonos")
+        plt.xlabel("Coordenada X")
+        plt.ylabel("Coordenada Y")
+        plt.grid(True)
+        plt.axis('square')
+        plt.xlim(-5, 5)
+        plt.ylim(-5, 5)
+
+        for i in range(36):
+            angulo = i * 10
+            desenhar_poligono(rotacionar_poligono(coordenadas_tri, angulo))
+
+        plt.show()
+
+        print("\n\nInsira as coordenadas para um quadrilátero.")
+        n = 4
+        coordenadas_quad = []
+
+        for i in range(n):
+            x = float(input(f"\nDigite a coordenada x{i + 1} para o quadrilátero: "))
+            y = float(input(f"Digite a coordenada y{i + 1} para o quadrilátero: "))
+            coordenadas_quad.append((x, y))
+
+        comprimentos_lados_quad = [calcular_distancia(coordenadas_quad[i], coordenadas_quad[(i+1)%n]) for i in range(n)]
+
+        if eh_poligono(comprimentos_lados_quad):
+            print("\n\nAs coordenadas formam um quadrilátero.")
+            plt.figure(figsize=(6, 6))
+            plt.title("Imagem com Polígonos")
+            plt.xlabel("Coordenada X")
+            plt.ylabel("Coordenada Y")
+            plt.grid(True)
+            plt.axis('square')
+            plt.xlim(-5, 5)
+            plt.ylim(-5, 5)
+
+            for i in range(36):
+                angulo = i * 10
+                desenhar_poligono(rotacionar_poligono(coordenadas_quad, angulo))
+
+            plt.show()
+
+            print("\n\nJuntando os dois polígonos na mesma imagem.")
+
+            plt.figure(figsize=(6, 6))
+            plt.title("Imagem com Polígonos")
+            plt.xlabel("Coordenada X")
+            plt.ylabel("Coordenada Y")
+            plt.grid(True)
+            plt.axis('square')
+            plt.xlim(-5, 5)
+            plt.ylim(-5, 5)
+
+            # Desenha triângulos
+            for i in range(36):
+                angulo = i * 10
+                desenhar_poligono(rotacionar_poligono(coordenadas_tri, angulo))
+
+            # Desenha quadriláteros
+            for i in range(36):
+                angulo = i * 10
+                desenhar_poligono(rotacionar_poligono(coordenadas_quad, angulo))
+
+            plt.show()
+        else:
+            print("As coordenadas não formam um quadrilátero.")
+    else:
+        print("As coordenadas não formam um triângulo.")
+
+if __name__ == "__main__":
+    main()
